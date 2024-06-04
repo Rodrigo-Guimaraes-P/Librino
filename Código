@@ -41,7 +41,7 @@ void setup() {
 void loop() {
   int randomindex = random(11);  //gera número aleatório de 0 a 10
   char carta_sorteada = PALAVRAS[randomindex];
-  lcd.init();  // initialize the lcd
+  lcd.clear();  // initialize the lcd
   // Print a message to the LCD.
   lcd.backlight();
   lcd.setCursor(5, 0);
@@ -111,8 +111,8 @@ void loop() {
       delay(1000);
     }
   }
- if(carta_sorteada=="beber"){
-    if (content.equalsIgnoreCase( cartaBeber))  //change here the UID of the card/cards that you want to give access
+  if (carta_sorteada == "carro") {
+    if (content.equalsIgnoreCase(cartaCarro))  //change here the UID of the card/cards that you want to give access
     {
       for (int i = 0; i < 2; i++) {
         digitalWrite(LED_G[i], HIGH);
@@ -141,8 +141,8 @@ void loop() {
       delay(1000);
     }
   }
-  if(carta_sorteada=="brincar"){
-    if (content.equalsIgnoreCase(cartaBrincar))  //change here the UID of the card/cards that you want to give access
+  if (carta_sorteada == "casa") {
+    if (content.equalsIgnoreCase(cartaCasa))  //change here the UID of the card/cards that you want to give access
     {
       for (int i = 0; i < 2; i++) {
         digitalWrite(LED_G[i], HIGH);
@@ -171,8 +171,8 @@ void loop() {
       delay(1000);
     }
   }
-  if(carta_sorteada=="copo"){
-    if (content.equalsIgnoreCase(cartaCopo))  //change here the UID of the card/cards that you want to give access
+  if (carta_sorteada == "bola") {
+    if (content.equalsIgnoreCase(cartaBola))  //change here the UID of the card/cards that you want to give access
     {
       for (int i = 0; i < 2; i++) {
         digitalWrite(LED_G[i], HIGH);
@@ -201,8 +201,8 @@ void loop() {
       delay(1000);
     }
   }
-  if(carta_sorteada=="tchau"){
-    if (content.equalsIgnoreCase(cartaTchau))  //change here the UID of the card/cards that you want to give access
+  if (carta_sorteada == "comer") {
+    if (content.equalsIgnoreCase(cartaComer))  //change here the UID of the card/cards that you want to give access
     {
       for (int i = 0; i < 2; i++) {
         digitalWrite(LED_G[i], HIGH);
@@ -231,38 +231,8 @@ void loop() {
       delay(1000);
     }
   }
-   if(carta_sorteada=="papel"){
-    if (content.equalsIgnoreCase(cartaPapel))  //change here the UID of the card/cards that you want to give access
-    {
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_G[i], HIGH);
-      }
-      lcd.init();
-      lcd.backlight();
-      lcd.setCursor(3, 1);
-      lcd.print("Carta correta!");
-      delay(2000);
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_G[i], LOW);
-      }
-      delay(1000);
-    } else {
-      lcd.init();
-      lcd.backlight();
-      lcd.setCursor(2, 1);
-      lcd.print("Carta incorreta!");
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_R[i], HIGH);
-      }
-      delay(1500);
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_R[i], LOW);
-      }
-      delay(1000);
-    }
-  }
-  if(carta_sorteada=="obrigado"){
-    if (content.equalsIgnoreCase(cartaObrigado))  //change here the UID of the card/cards that you want to give access
+  if (carta_sorteada == "beber") {
+    if (content.equalsIgnoreCase(cartaBeber))  //change here the UID of the card/cards that you want to give access
     {
       for (int i = 0; i < 2; i++) {
         digitalWrite(LED_G[i], HIGH);
