@@ -6,17 +6,17 @@
 #define RST_PIN 9
 #define NUM_STRINGS 11
 #define MAX_LENGTH 10
-String cartaTelefone = "93CF6832";
-#define cartaCarro ()
-#define cartaCasa ()
-#define cartaBola ()
-#define cartaComer ()
-#define cartaBeber ()
-#define cartaBrincar ()
-#define cartaCopo ()
-#define cartaTchau ()
-#define cartaPapel ()
-#define cartaObrigado ()
+#define cartaTelefone ("93CF6832")
+#define cartaCarro ("")
+#define cartaCasa ("")
+#define cartaBola ("")
+#define cartaComer ("")
+#define cartaBeber ("")
+#define cartaBrincar ("")
+#define cartaCopo ("")
+#define cartaTchau ("")
+#define cartaPapel ("")
+#define cartaObrigado ("")
 byte randomindex;
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int LED_R[] = { 2, 8 };
@@ -39,76 +39,133 @@ void setup() {
 }
 
 void loop() {
-  int randomindex = random(12);  //gera número aleatório de 0 a 10
+  int randomindex = random(11);  //gera número aleatório de 0 a 10
   char carta_sorteada = PALAVRAS[randomindex];
   lcd.init();  // initialize the lcd
   // Print a message to the LCD.
   lcd.backlight();
   lcd.setCursor(5, 0);
-  if (carta_sorteada == 0) {
-  }
-  for (int i = 0; i < MAX_LENGTH; i++) {
-    lcd.print(PALAVRAS[randomindex][i]);
-  }
-  lcd.setCursor(2, 2);
-  lcd.print("Aproxime a carta");
-  lcd.setCursor(3, 3);
-  lcd.print("correspondente");
-  delay(10000);
-  // Look for new cards
-  if (!mfrc522.PICC_IsNewCardPresent()) {
-  }
-  // Select one of the cards
-  if (!mfrc522.PICC_ReadCardSerial()) {
-    return;
-  }
-  // Show UID on serial monitor
-  Serial.print("UID tag :");
-  String content = "";
-  byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++) {
-    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? "0" : " ");
-    Serial.print(mfrc522.uid.uidByte[i], HEX);
-    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
-    content.concat(String(mfrc522.uid.uidByte[i], HEX));
-  }
-  Serial.println();
-  Serial.print("Message: ");
-  content.toUpperCase();  // Essa função não altera o conteúdo original da string
-  Serial.println(content);
-
-  // Remover o primeiro caractere "0" que foi adicionado anteriormente
-  if (content.startsWith("0")) {
-    content = content.substring(1);
-  }
-
-  // Verificar UID
-  if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
-  {
-    for (int i = 0; i < 2; i++) {
-      digitalWrite(LED_G[i], HIGH);
+  if (carta_sorteada == "telefone") {
+    if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
+    {
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_G[i], HIGH);
+      }
+      lcd.init();
+      lcd.backlight();
+      lcd.setCursor(3, 1);
+      lcd.print("Carta correta!");
+      delay(2000);
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_G[i], LOW);
+      }
+      delay(1000);
+    } else {
+      lcd.init();
+      lcd.backlight();
+      lcd.setCursor(2, 1);
+      lcd.print("Carta incorreta!");
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_R[i], HIGH);
+      }
+      delay(1500);
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_R[i], LOW);
+      }
+      delay(1000);
     }
-    lcd.init();
-    lcd.backlight();
-    lcd.setCursor(3, 1);
-    lcd.print("Carta correta!");
-    delay(2000);
-    for (int i = 0; i < 2; i++) {
-      digitalWrite(LED_G[i], LOW);
+    if (carta_sorteada == "telefone") {
+      if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
+      {
+        for (int i = 0; i < 2; i++) {
+          digitalWrite(LED_G[i], HIGH);
+        }
+        lcd.init();
+        lcd.backlight();
+        lcd.setCursor(3, 1);
+        lcd.print("Carta correta!");
+        delay(2000);
+        for (int i = 0; i < 2; i++) {
+          digitalWrite(LED_G[i], LOW);
+        }
+        delay(1000);
+      } else {
+        lcd.init();
+        lcd.backlight();
+        lcd.setCursor(2, 1);
+        lcd.print("Carta incorreta!");
+        for (int i = 0; i < 2; i++) {
+          digitalWrite(LED_R[i], HIGH);
+        }
+        delay(1500);
+        for (int i = 0; i < 2; i++) {
+          digitalWrite(LED_R[i], LOW);
+        }
+        delay(1000);
+      }
     }
+    for (int i = 0; i < MAX_LENGTH; i++) {
+      lcd.print(PALAVRAS[randomindex][i]);
+    }
+    lcd.setCursor(2, 2);
+    lcd.print("Aproxime a carta");
+    lcd.setCursor(3, 3);
+    lcd.print("correspondente");
     delay(1000);
-  } else {
-    lcd.init();
-    lcd.backlight();
-    lcd.setCursor(2, 1);
-    lcd.print("Carta incorreta!");
-    for (int i = 0; i < 2; i++) {
-      digitalWrite(LED_R[i], HIGH);
+    // Look for new cards
+    if (!mfrc522.PICC_IsNewCardPresent()) {
     }
-    delay(1500);
-    for (int i = 0; i < 2; i++) {
-      digitalWrite(LED_R[i], LOW);
+    // Select one of the cards
+    if (!mfrc522.PICC_ReadCardSerial()) {
+      return;
     }
-    delay(1000);
+    // Show UID on serial monitor
+    Serial.print("UID tag :");
+    String content = "";
+    byte letter;
+    for (byte i = 0; i < mfrc522.uid.size; i++) {
+      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? "0" : " ");
+      Serial.print(mfrc522.uid.uidByte[i], HEX);
+      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
+      content.concat(String(mfrc522.uid.uidByte[i], HEX));
+    }
+    Serial.println();
+    Serial.print("Message: ");
+    content.toUpperCase();  // Essa função não altera o conteúdo original da string
+    Serial.println(content);
+
+    // Remover o primeiro caractere "0" que foi adicionado anteriormente
+    if (content.startsWith("0")) {
+      content = content.substring(1);
+    }
+
+    // Verificar UID
+    if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
+    {
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_G[i], HIGH);
+      }
+      lcd.init();
+      lcd.backlight();
+      lcd.setCursor(3, 1);
+      lcd.print("Carta correta!");
+      delay(2000);
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_G[i], LOW);
+      }
+      delay(1000);
+    } else {
+      lcd.init();
+      lcd.backlight();
+      lcd.setCursor(2, 1);
+      lcd.print("Carta incorreta!");
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_R[i], HIGH);
+      }
+      delay(1500);
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(LED_R[i], LOW);
+      }
+      delay(1000);
+    }
   }
-}
