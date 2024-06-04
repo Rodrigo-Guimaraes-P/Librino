@@ -8,25 +8,24 @@
 #define MAX_LENGTH 10
 
 #define cartaTelefone "93CF6832"
-#define cartaCarro ""
-#define cartaCasa ""
-#define cartaBola ""
-#define cartaComer ""
-#define cartaBeber ""
-#define cartaBrincar ""
-#define cartaCopo ""
-#define cartaTchau ""
-#define cartaPapel ""
-#define cartaObrigado ""
+#define cartaCarro "C388F2FC"
+#define cartaCasa "135D1DFD"
+#define cartaBola "936534FC"
+#define cartaComer "93A182FD"
+#define cartaBeber "539E2DFD"
+#define cartaBrincar "734EFDFD"
+#define cartaCopo "538EF6FC"
+#define cartaTchau "53798FFD"
+#define cartaPapel "F387EAFD"
+#define cartaObrigado "B38AF7FC"
 
 byte randomindex;
-LiquidCrystal_I2C lcd(0x27, 20, 4); // Verifique o endereço do seu LCD, pode ser diferente (0x3F, 0x27, etc.)
-int LED_R[] = {2, 8};
-int LED_G[] = {4, 5};
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+int LED_G[] = { 4, 5 };
+int LED_R[] = { 2, 8 };
 
 char PALAVRAS[NUM_STRINGS][MAX_LENGTH] = {
-  {"telefone"}, {"carro"}, {"casa"}, {"bola"}, {"comer"}, 
-  {"beber"}, {"brincar"}, {"copo"}, {"tchau"}, {"papel"}, {"obrigado"}
+  { "telefone" }, { "carro" }, { "casa" }, { "bola" }, { "comer" }, { "beber" }, { "brincar" }, { "copo" }, { "tchau" }, { "papel" }, { "obrigado" }
 };
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance.
@@ -37,12 +36,12 @@ void setup() {
     pinMode(LED_G[i], OUTPUT);
   }
 
-  Serial.begin(9600);  // Initiate a serial communication
-  SPI.begin();         // Initiate SPI bus
-  mfrc522.PCD_Init();  // Initiate MFRC522
+  Serial.begin(9600);  // Inicia a comunicação serial
+  SPI.begin();         // Initiate o SPI
+  mfrc522.PCD_Init();  // Inicia o Sensor
 
-  lcd.init();          // Initialize the LCD
-  lcd.backlight();     // Turn on the backlight
+  lcd.init();       // Inicia o LCD
+  lcd.backlight();  // Acende a luz de fundo
 
   Serial.println("Put your card to the reader...");
   Serial.println();
@@ -51,7 +50,7 @@ void setup() {
 void loop() {
   randomindex = random(NUM_STRINGS);  // Gera número aleatório de 0 a 10
 
-  lcd.clear();  // Clear the LCD
+  lcd.clear();  // Limpa o LCD
   lcd.setCursor(5, 0);
   lcd.print(PALAVRAS[randomindex]);
   lcd.setCursor(2, 2);
@@ -60,17 +59,16 @@ void loop() {
   lcd.print("correspondente");
 
   while (true) {
-    // Look for new cards
+    // Procura por novas cartas
     if (!mfrc522.PICC_IsNewCardPresent()) {
       continue;
     }
-    
-    // Select one of the cards
+
+    // Lê a carta aproximada
     if (!mfrc522.PICC_ReadCardSerial()) {
       continue;
     }
 
-    // Show UID on serial monitor
     String content = "";
     for (byte i = 0; i < mfrc522.uid.size; i++) {
       content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
@@ -84,15 +82,15 @@ void loop() {
     }
 
     Serial.println("UID tag: " + content);
-    
+
     if (isCorrectCard(content, randomindex)) {
       displayResult("Carta correta!", true);
     } else {
       displayResult("Carta incorreta!", false);
     }
-    
+
     delay(2000);  // Delay before starting over
-    break;  // Exit the while loop to start over in the main loop
+    break;        // Exit the while loop to start over in the main loop
   }
 }
 
