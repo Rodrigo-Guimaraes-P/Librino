@@ -45,6 +45,42 @@ void loop() {
   // Print a message to the LCD.
   lcd.backlight();
   lcd.setCursor(5, 0);
+  for (int i = 0; i < MAX_LENGTH; i++) {
+    lcd.print(PALAVRAS[randomindex][i]);
+  }
+  lcd.setCursor(2, 2);
+  lcd.print("Aproxime a carta");
+  lcd.setCursor(3, 3);
+  lcd.print("correspondente");
+  delay(1000);
+  // Look for new cards
+  if (!mfrc522.PICC_IsNewCardPresent()) {
+  }
+  // Select one of the cards
+  if (!mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
+  // Show UID on serial monitor
+  Serial.print("UID tag :");
+  String content = "";
+  byte letter;
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? "0" : " ");
+    Serial.print(mfrc522.uid.uidByte[i], HEX);
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+  Serial.println();
+  Serial.print("Message: ");
+  content.toUpperCase();  // Essa função não altera o conteúdo original da string
+  Serial.println(content);
+
+  // Remover o primeiro caractere "0" que foi adicionado anteriormente
+  if (content.startsWith("0")) {
+    content = content.substring(1);
+  }
+
+  // Verificar UID
   if (carta_sorteada == "telefone") {
     if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
     {
@@ -74,98 +110,5 @@ void loop() {
       }
       delay(1000);
     }
-    if (carta_sorteada == "telefone") {
-      if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
-      {
-        for (int i = 0; i < 2; i++) {
-          digitalWrite(LED_G[i], HIGH);
-        }
-        lcd.init();
-        lcd.backlight();
-        lcd.setCursor(3, 1);
-        lcd.print("Carta correta!");
-        delay(2000);
-        for (int i = 0; i < 2; i++) {
-          digitalWrite(LED_G[i], LOW);
-        }
-        delay(1000);
-      } else {
-        lcd.init();
-        lcd.backlight();
-        lcd.setCursor(2, 1);
-        lcd.print("Carta incorreta!");
-        for (int i = 0; i < 2; i++) {
-          digitalWrite(LED_R[i], HIGH);
-        }
-        delay(1500);
-        for (int i = 0; i < 2; i++) {
-          digitalWrite(LED_R[i], LOW);
-        }
-        delay(1000);
-      }
-    }
-    for (int i = 0; i < MAX_LENGTH; i++) {
-      lcd.print(PALAVRAS[randomindex][i]);
-    }
-    lcd.setCursor(2, 2);
-    lcd.print("Aproxime a carta");
-    lcd.setCursor(3, 3);
-    lcd.print("correspondente");
-    delay(1000);
-    // Look for new cards
-    if (!mfrc522.PICC_IsNewCardPresent()) {
-    }
-    // Select one of the cards
-    if (!mfrc522.PICC_ReadCardSerial()) {
-      return;
-    }
-    // Show UID on serial monitor
-    Serial.print("UID tag :");
-    String content = "";
-    byte letter;
-    for (byte i = 0; i < mfrc522.uid.size; i++) {
-      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? "0" : " ");
-      Serial.print(mfrc522.uid.uidByte[i], HEX);
-      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
-      content.concat(String(mfrc522.uid.uidByte[i], HEX));
-    }
-    Serial.println();
-    Serial.print("Message: ");
-    content.toUpperCase();  // Essa função não altera o conteúdo original da string
-    Serial.println(content);
-
-    // Remover o primeiro caractere "0" que foi adicionado anteriormente
-    if (content.startsWith("0")) {
-      content = content.substring(1);
-    }
-
-    // Verificar UID
-    if (content.equalsIgnoreCase(cartaTelefone))  //change here the UID of the card/cards that you want to give access
-    {
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_G[i], HIGH);
-      }
-      lcd.init();
-      lcd.backlight();
-      lcd.setCursor(3, 1);
-      lcd.print("Carta correta!");
-      delay(2000);
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_G[i], LOW);
-      }
-      delay(1000);
-    } else {
-      lcd.init();
-      lcd.backlight();
-      lcd.setCursor(2, 1);
-      lcd.print("Carta incorreta!");
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_R[i], HIGH);
-      }
-      delay(1500);
-      for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_R[i], LOW);
-      }
-      delay(1000);
-    }
   }
+}
