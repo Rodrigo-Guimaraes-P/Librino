@@ -43,12 +43,11 @@ void setup() {
   lcd.init();       // Inicia o LCD
   lcd.backlight();  // Acende a luz de fundo
 
-  Serial.println("Put your card to the reader...");
-  Serial.println();
+  randomSeed(analogRead(0));
 }
 
-void loop() {
-  randomindex = random(NUM_STRINGS);  // Gera número aleatório de 0 a 10
+void loop() { 
+randomindex = random(NUM_STRINGS);  // Gera número aleatório de 0 a 10
 
   lcd.clear();  // Limpa o LCD
   lcd.setCursor(5, 0);
